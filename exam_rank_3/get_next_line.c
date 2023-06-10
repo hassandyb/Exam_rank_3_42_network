@@ -170,10 +170,10 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int main ()
-{
-	int fd = open 
-}
+// int main ()
+// {
+// 	int fd = open 
+// }
 
 
 
