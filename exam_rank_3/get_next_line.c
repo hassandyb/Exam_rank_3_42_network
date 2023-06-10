@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 #define BUFFER_SIZE 45
 
@@ -21,7 +22,7 @@ int ft_check(char *stock)
 		return 0;
 	while(stock[i])
 	{
-		if(stock[i] == '\n');
+		if(stock[i] == '\n')
 			return 1;
 	}
 	return 0;
@@ -29,7 +30,7 @@ int ft_check(char *stock)
 
 char *ft_strjoin(char *stock, char *buffer)
 {
-	if(stock == NULL);
+	if(stock == NULL)
 	{
 		stock = malloc(sizeof(char));
 		if(stock == NULL)
@@ -64,7 +65,7 @@ int ft_linelen(char *stock)
 	int i = 0;
 	while(stock[i])
 	{
-		if(stock[i] == '\n');
+		if(stock[i] == '\n')
 		{
 			i++;
 			return i;
@@ -114,11 +115,17 @@ int ft_afterlinelen(char *stock)
 	}
 	return j;
 }
+
 char *ft_get_after_newline(char *stock)
 {
+
 	if(stock == NULL || *stock == '\0')
 		return NULL;
 	if(ft_linelen(stock) == ft_strlen(stock))
+		return NULL;
+	int len = ft_afterlinelen(stock);
+	char *temp = malloc((len + 1) * sizeof(char));
+	if(temp == NULL)
 		return NULL;
 	int i = 0;
 	while(stock[i])
@@ -127,7 +134,19 @@ char *ft_get_after_newline(char *stock)
 			break;
 		i++;
 	}
-	int len = ft_afterlinelen(stock);
+	i++;
+	int j = 0;
+	while(stock[i])
+	{
+		temp[j] = stock [i];
+		j++;
+		i++;
+	}
+	temp[i] = '\0';
+	free(stock);
+	return(temp);
+	
+
 }
 
 char	*get_next_line(int fd)
@@ -146,12 +165,15 @@ char	*get_next_line(int fd)
 		stock = ft_strjoin(stock, buffer);
 	}
 	free(buffer);
-	char line = ft_get_befor_newline(stock);
+	char *line = ft_get_befor_newline(stock);
 	stock = ft_get_after_newline(stock);
+	return (line);
 }
 
-
-
+int main ()
+{
+	int fd = open 
+}
 
 
 
