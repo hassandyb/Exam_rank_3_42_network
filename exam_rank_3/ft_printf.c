@@ -23,17 +23,31 @@ void ft_putstr(char *str, int *len)
 	}
 }
 
-void ft_putnbr_base(int nbr, int base, int *len)
+void ft_putnbr_base10(int nbr, int base, int *len)
 {
+	long n;
+
+	n = nbr;
 	char *base_ref = "0123456789abcdef";
-	if(nbr < 0)
+	if(n < 0)
 	{
-		nbr *= -1;
+		n *= -1;
 		*len += write(1, "-", 1);
 	}
-	if(nbr >= base)
-		ft_putnbr_base(nbr / base, base, len);
-	*len = *len + write(1, &base_ref[nbr % base], 1);
+	if(n >= base)
+		ft_putnbr_base10(n / base, base, len);
+	*len = *len + write(1, &base_ref[n % base], 1);
+}
+
+void ft_putnbr_base16(unsigned int nbr, int base, int *len)
+{
+	long n;
+
+	n = nbr;
+	char *base_ref = "0123456789abcdef";
+	if(n >= base)
+		ft_putnbr_base16(n / base, base, len);
+	*len = *len + write(1, &base_ref[n % base], 1);
 }
 
 int ft_printf(const char *str, ... )
@@ -41,7 +55,6 @@ int ft_printf(const char *str, ... )
 	int len = 0;
 	va_list args;
 	va_start(args, str);
-	va_end(args);
 	int i = 0;
 	while(str[i])
 	{
@@ -51,9 +64,9 @@ int ft_printf(const char *str, ... )
 			if(str[i] == 's')
 				ft_putstr(va_arg(args, char *), &len);
 			if(str[i] == 'd')
-				ft_putnbr_base(va_arg(args, int), 10,&len);
+				ft_putnbr_base10(va_arg(args, int), 10,&len);
 			if(str[i] == 'x')
-				ft_putnbr_base(va_arg(args, int), 16, &len);
+				ft_putnbr_base16(va_arg(args, unsigned int), 16, &len);
 		}
 		else if(str[i] == '\0')
 			break ;
@@ -64,7 +77,16 @@ int ft_printf(const char *str, ... )
 		}
 		i++;
 	}
+	
+	va_end(args);
 	return len;
 }
 
-int main ()
+// int main(int argc, char const *argv[])
+// {
+// 		ft_printf("%d\n", (int)-2147483649);
+// 		printf("%d\n", (int)-2147483649);
+// 	// ft_printf("%d\n", (int)-2147483648);
+// 	return 0;
+// }
+
